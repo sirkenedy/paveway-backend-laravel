@@ -37,19 +37,26 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::apiresource('book', 'Api\BookController');
     Route::put('book/file/{id}', 'Api\BookController@updateBookFile');
     Route::get('userdetails', 'Api\UserController@getUserDetails');
+
+    Route::apiresource('faculty', 'Api\FacultyController');
+    Route::get('faculty/{id}/dep', 'Api\FacultyController@departments');
+
+
+    Route::apiresource('departments', 'Api\DepartmentController');
+    Route::get('departments/{id}/prog', 'Api\DepartmentController@programs');
+
+    Route::apiresource('programs', 'Api\ProgramController');
+
+    Route::get('levels', 'Api\LevelController@index');
+
+    Route::post('levels', 'Api\LevelController@store');
+    Route::delete('levels/{id}', 'Api\LevelController@destroy');
 });
 
-Route::apiresource('faculty', 'Api\FacultyController');
-Route::get('faculty/{id}/dep', 'Api\FacultyController@departments');
 
 
-Route::apiresource('departments', 'Api\DepartmentController');
-Route::get('departments/{id}/prog', 'Api\DepartmentController@programs');
 
 
-Route::apiresource('programs', 'Api\ProgramController');
 
-Route::get('levels', 'Api\LevelController@index');
 
-Route::post('levels', 'Api\LevelController@store');
-Route::delete('levels/{id}', 'Api\LevelController@destroy');
+

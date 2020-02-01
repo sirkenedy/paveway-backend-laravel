@@ -17,7 +17,7 @@ class AuthControllerTest extends TestCase
      * @return void
      */
     /** @test */
-    public function testRegister()
+    public function testRegisterWithValidCredentials()
     {
         // $this->withoutExceptionHandling();
 
@@ -38,15 +38,26 @@ class AuthControllerTest extends TestCase
         // $response->assertStatus(200);
     }
 
+    public function testRegisterWithInvalidCredentials()
+    {
+        // Role::create([
+        //     'title' => 'student'
+        // ]);
+        $data = $this->data();
+        $response = $this->json('POST', '/api/auth/signup', $data)->assertStatus(422)->assertJsonStructure([
+            'role',
+        ]);;
+    }
+
     /** @test */
-    public function testLogin()
+    public function testLoginWithValidCredentials()
     {
         $data = [
             'email' => 'harnie@gmail.com',
             'password' => '123456',
         ];
 
-        $this->testRegister();
+        $this->testRegisterWithValidCredentials();
         $response = $this->json('POST', '/api/auth/signin', $data)->assertStatus(200)->assertJsonStructure([
             'token',
             'firstname',
@@ -56,6 +67,19 @@ class AuthControllerTest extends TestCase
             'token_type',
             'role',
         ]);;;
+    }
+
+    public function testLoginWithInvalidCredentials()
+    {
+        $data = [
+            'email' => 'harni@gmail.com',
+            'password' => '123456',
+        ];
+
+        $this->testRegisterWithValidCredentials();
+        $response = $this->json('POST', '/api/auth/signin', $data)->assertStatus(404)->assertJsonStructure([
+            'error',
+        ]);
     }
 
     protected function data() {
